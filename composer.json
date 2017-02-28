@@ -1,0 +1,14 @@
+{
+    "name": "peaceman/facebook-page-event-fetcher",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "peaceman",
+            "email": "nixalio@gmail.com"
+        }
+    ],
+    "require": {
+        "facebook/graph-sdk": "~5.0",
+        "vlucas/phpdotenv": "^2.4"
+    }
+}
