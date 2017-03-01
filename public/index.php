@@ -23,4 +23,4 @@ $data = array_map(function ($events) use ($filterEvents) {
 }, $data);
 
 header('Content-Type: application/json');
-echo json_encode($data);
+echo json_encode(['root' => $data]);
