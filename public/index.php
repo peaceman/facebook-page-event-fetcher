@@ -10,7 +10,10 @@ $fb = new Facebook\Facebook([
 
 $pageIds = getenv('PAGE_IDS');
 
-$response = $fb->sendRequest('GET', '/events', ['ids' => $pageIds, 'fields' => 'id,cover,name,description,place,ticket_uri,start_time,end_time']);
+$response = $fb->sendRequest('GET', '/events', [
+    'ids' => $pageIds,
+    'fields' => 'id,cover,name,description,place,ticket_uri,start_time,end_time'
+]);
 $data = $response->getDecodedBody();
 
 $filterEvents = function ($event) {
