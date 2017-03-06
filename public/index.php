@@ -10,7 +10,7 @@ $fb = new Facebook\Facebook([
 
 $pageIds = getenv('PAGE_IDS');
 
-$response = $fb->sendRequest('GET', '/events', ['ids' => $pageIds, 'fields' => 'cover,name,description,place,ticket_uri,start_time,end_time']);
+$response = $fb->sendRequest('GET', '/events', ['ids' => $pageIds, 'fields' => 'id,cover,name,description,place,ticket_uri,start_time,end_time']);
 $data = $response->getDecodedBody();
 
 $filterEvents = function ($event) {
@@ -18,9 +18,23 @@ $filterEvents = function ($event) {
     return $startTime > (new DateTime());
 };
 
-$data = array_map(function ($events) use ($filterEvents) {
-    return array_filter($events['data'], $filterEvents);
-}, $data);
+$pageIds = array_keys($data);
+$eventsPerPage = array_values($data);
+
+$data = array_combine($pageIds, array_map(function ($events, $pageId) use ($filterEvents) {
+    return array_map(function ($event) use ($pageId) {
+        $event['pageId'] = $pageId;
+
+        $startDateTime = DateTime::createFromFormat(DateTime::ISO8601, $event['start_time']);
+        $endDateTime = DateTime::createFromFormat(DateTime::ISO8601, $event['end_time']);
+        unset($event['start_time'], $event['end_time']);
+
+        $event['start'] = createDateTimeInfo($startDateTime);
+        $event['end'] = createDateTimeInfo($endDateTime);
+
+        return $event;
+    }, array_filter($events['data'], $filterEvents));
+}, $eventsPerPage, $pageIds));
 
 header('Content-Type: application/json');
 echo json_encode(['root' => $data]);
