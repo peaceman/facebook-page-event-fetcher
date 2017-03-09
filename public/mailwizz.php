@@ -32,7 +32,6 @@ if (isset($_GET['force-refresh']) || !file_exists($cacheFile) || time() - $cache
     $data = array_map(function ($events) use ($filterEvents) {
         return array_map(function ($event) {
             $startDateTime = DateTime::createFromFormat(DateTime::ISO8601, $event['start_time']);
-            unset($event['start_time']);
 
             $toReturn = [
                 'title' => $startDateTime->format('d.m.Y') . ' - ' . $event['name'],
@@ -42,6 +41,7 @@ if (isset($_GET['force-refresh']) || !file_exists($cacheFile) || time() - $cache
                 'link' => 'http://' . parse_url($event['ticket_uri'], PHP_URL_HOST),
                 'pubDate' => 'am ' . $startDateTime->format('d.m.Y') . ' um ' . $startDateTime->format('H:i') . ' @ ' . $event['place']['name'],
                 'guid' => $event['id'],
+                'startDateTime' => $startDateTime,
             ];
 
             return $toReturn;
@@ -51,6 +51,15 @@ if (isset($_GET['force-refresh']) || !file_exists($cacheFile) || time() - $cache
     $data = array_reduce($data, function ($result, $eventsPerPage) {
         return array_merge($result, $eventsPerPage);
     }, []);
+
+    usort($data, function ($x, $y) {
+        return $x <=> $y;
+    });
+
+    $data = array_map(function ($event) {
+        unset($event['startDateTime']);
+        return $event;
+    }, $data);
 
     $jsonData = json_encode($data, JSON_PRETTY_PRINT);
     file_put_contents($cacheFile, $jsonData, LOCK_EX);
