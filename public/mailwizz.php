@@ -35,13 +35,13 @@ if (isset($_GET['force-refresh']) || !file_exists($cacheFile) || time() - $cache
             $startDateTime = DateTime::createFromFormat(DateTime::ISO8601, $event['start_time']);
 
             $toReturn = [
-                'title' => $startDateTime->format('d.m.Y') . ' - ' . $event['name'],
-                'description' => substr($event['description'], 0, strpos(wordwrap($event['description'], 250), "\n")),
-                'content' => 'https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?url=' . urlencode($event['cover']['source']) . '&container=focus&resize_w=720&resize_h=212&refresh=2592000',
-                'image' => $event['cover']['source'],
-                'link' => 'http://' . parse_url($event['ticket_uri'], PHP_URL_HOST),
-                'pubDate' => 'am ' . $startDateTime->format('d.m.Y') . ' um ' . $startDateTime->format('H:i') . ' @ ' . $event['place']['name'],
-                'guid' => $event['id'],
+                'title' => $event['name'],
+               	'description' => substr($event['description'], 0, strpos($event['description'], ' ', 3)) . ' ... <br><a style="text-align:right;" href="https://www.facebook.com/events/' . $event['id'] . '">>> mehr </a>',
+                'content' => $event['place']['location']['street'] . ' - ' . $event['place']['location']['zip'] . ' ' . $event['place']['location']['city'],
+                'image' => 'https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?url=' . urlencode($event['cover']['source']) . '&container=focus&resize_w=580&resize_h=212&refresh=1',
+                'link' => $date = isset($event['ticket_uri']) ? 'http://' . parse_url($event['ticket_uri'], PHP_URL_HOST) : '',
+                'pubDate' => strftime("%A, %d. %B %Y",$startDateTime->getTimestamp()) . ' | ' . $startDateTime->format('H:i') . ' | ' . $event['place']['name'],
+				'guid' => $event['id'],
                 'startDateTime' => $startDateTime,
             ];
 
