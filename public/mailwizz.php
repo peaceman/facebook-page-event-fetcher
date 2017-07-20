@@ -1,4 +1,5 @@
 <?php
+setlocale (LC_ALL, 'de_DE.utf8');
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $dotEnv = new \Dotenv\Dotenv(__DIR__ . '/..');
