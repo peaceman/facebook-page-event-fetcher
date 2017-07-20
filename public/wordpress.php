@@ -40,4 +40,5 @@ $data = array_combine($pageIds, array_map(function ($events, $pageId) use ($filt
 }, $eventsPerPage, $pageIds));
 
 header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
 echo json_encode(['root' => $data]);
