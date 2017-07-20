@@ -16,7 +16,7 @@ $cacheFile =  __DIR__ . '/../storage/events.json';
 // define how long we want to keep the file in seconds. I set mine to 5 hours.
 $cacheTime = 5 * 60 * 60;
 // Check if the cached file is still fresh. If it is, serve it up and exit.
-if (isset($_GET['force-refresh']) || !file_exists($cacheFile) || time() - $cacheTime < filemtime($cacheFile)) {
+if (isset($_GET['force-refresh']) || !file_exists($cacheFile) || time() - $cacheTime > filemtime($cacheFile)) {
     $response = $fb->sendRequest('GET', '/events', [
         'ids' => $pageIds,
         'fields' => 'id,cover,name,description,place,ticket_uri,start_time'
