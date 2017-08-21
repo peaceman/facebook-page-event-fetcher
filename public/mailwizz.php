@@ -12,7 +12,7 @@ $fb = new Facebook\Facebook([
 $pageIds = getenv('PAGE_IDS');
 
 // define the path and name of cached file
-$cacheFile = __DIR__ . '/../storage/' . __FILE__ . 'events.json';
+$cacheFile = __DIR__ . '/../storage/' . basename(__FILE__, '.php') . 'events.json';
 // define how long we want to keep the file in seconds. I set mine to 5 hours.
 $cacheTime = 5 * 60 * 60;
 // Check if the cached file is still fresh. If it is, serve it up and exit.
