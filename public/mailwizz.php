@@ -12,7 +12,7 @@ $fb = new Facebook\Facebook([
 $pageIds = getenv('PAGE_IDS');
 
 // define the path and name of cached file
-$cacheFile = __DIR__ . '/../storage/events.json';
+$cacheFile = __DIR__ . '/../storage/' . __FILE__ . 'events.json';
 // define how long we want to keep the file in seconds. I set mine to 5 hours.
 $cacheTime = 5 * 60 * 60;
 // Check if the cached file is still fresh. If it is, serve it up and exit.
@@ -54,7 +54,7 @@ if (isset($_GET['force-refresh']) || !file_exists($cacheFile) || time() - $cache
     }, []);
 
     usort($data, function ($x, $y) {
-        return $x <=> $y;
+        return $x['startDateTime'] <=> $y['startDateTime'];
     });
 
     $data = array_map(function ($event) {
