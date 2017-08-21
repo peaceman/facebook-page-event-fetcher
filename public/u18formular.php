@@ -1,5 +1,5 @@
 <?php
-setlocale (LC_ALL, 'de_DE.utf8');
+setlocale(LC_ALL, 'de_DE.utf8');
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $dotEnv = new \Dotenv\Dotenv(__DIR__ . '/../env_u18');
@@ -12,7 +12,7 @@ $fb = new Facebook\Facebook([
 $pageIds = getenv('PAGE_IDS');
 
 // define the path and name of cached file
-$cacheFile =  __DIR__ . '/../storage/events.json';
+$cacheFile = __DIR__ . '/../storage/events.json';
 // define how long we want to keep the file in seconds. I set mine to 5 hours. * 60 * 60
 $cacheTime = 5 * 60 * 60;
 // Check if the cached file is still fresh. If it is, serve it up and exit.
@@ -24,7 +24,7 @@ if (isset($_GET['force-refresh']) || !file_exists($cacheFile) || time() - $cache
     $data = $response->getDecodedBody();
 
     $filterEvents = function ($event) {
-		$startTime = DateTime::createFromFormat(DateTime::ISO8601, $event['start_time']);
+        $startTime = DateTime::createFromFormat(DateTime::ISO8601, $event['start_time']);
         return $startTime > (new DateTime());
     };
 
@@ -36,9 +36,9 @@ if (isset($_GET['force-refresh']) || !file_exists($cacheFile) || time() - $cache
 
             $toReturn = [
                 'name' => $event['name'],
-                'downloadlink' => getenv('DOWNLOAD_BASE_URL') . '/?date=' . urlencode(strftime("%A, %d. %B %Y",$startDateTime->getTimestamp())) . '&event=' . urlencode($event['name']) . '&filename=' . urlencode(strftime("%d.%m.%Y",$startDateTime->getTimestamp())),
-                'date' => strftime("%A, %d. %B %Y",$startDateTime->getTimestamp()) . ' | ' . $startDateTime->format('H:i') . ' | ' . $event['place']['name'],
-				'guid' => $event['id'],
+                'downloadlink' => getenv('DOWNLOAD_BASE_URL') . '/?date=' . urlencode(strftime("%A, %d. %B %Y", $startDateTime->getTimestamp())) . '&event=' . urlencode($event['name']) . '&filename=' . urlencode(strftime("%d.%m.%Y", $startDateTime->getTimestamp())),
+                'date' => strftime("%A, %d. %B %Y", $startDateTime->getTimestamp()) . ' | ' . $startDateTime->format('H:i') . ' | ' . $event['place']['name'],
+                'guid' => $event['id'],
                 'startDateTime' => $startDateTime,
             ];
 
@@ -49,7 +49,8 @@ if (isset($_GET['force-refresh']) || !file_exists($cacheFile) || time() - $cache
     $data = array_reduce($data, function ($result, $eventsPerPage) {
         return array_merge($result, $eventsPerPage);
     }, []);
-usort($data, function ($y, $x) { return $x <=> $y;
+    usort($data, function ($y, $x) {
+        return $x <=> $y;
     });
 
     $data = array_map(function ($event) {
