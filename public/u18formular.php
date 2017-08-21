@@ -47,7 +47,7 @@ if (isset($_GET['force-refresh']) || !file_exists($cacheFile) || time() - $cache
                     'filename' => $dmy,
                 ];
 
-                $downloadLinks[] = ['date' => $dmy, 'url' => getenv('DOWNLOAD_BASE_URL') . http_build_query($queryParams)];
+                $downloadLinks[] = ['date' => $dmy, 'url' => getenv('DOWNLOAD_BASE_URL') . '/' . http_build_query($queryParams)];
             }
 
             $toReturn = [
